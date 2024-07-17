@@ -4,16 +4,38 @@ import TodoCreate from './components/TodoCreate';
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState([]);
+
+  const createTodo =() => {
+    const newTodo = {id: crypto.randomUUID(), title: title, completed: false};
+    const updatedTodos = [...todos, newTodo];
+    setTodos(updatedTodos);
+}
+
+const removeTodo = (id) => {
+  const updatedTodos = todos.filter((todo) => todo.id !== id);
+  setTodos(updatedTodos);
+};
+
+const changeTodo = (id, title, completed = false) => {
+  const updatedTodos = todos.map((todo) => {
+    if (todo.id === id) {
+      return { ...todo, title, completed };
+    }
+    return todo;
+  });
+
+  setTodos(updatedTodos);
+};
 
   return (
     <>
-     <main className="className">
+     <main className="main">
       <h1>
         React Todo <span>Streamline Your Day, the React Way!</span>
       </h1>
-      <TodoList />
-      <TodoCreate />
+      <TodoList todos={todos} removeTodo={removeTodo} changeTodo={changeTodo}/>
+      <TodoCreate createTodo={createTodo}/>
      </main>
     </>
   )
